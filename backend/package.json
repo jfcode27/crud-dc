@@ -1,0 +1,29 @@
+{
+  "name": "masterprof-backend",
+  "version": "1.0.0",
+  "description": "Backend del proyecto final para la materia de Desarrollo Colaborativo",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "db:import": "node ./seed/seeder.js -i",
+    "db:delete": "node ./seed/seeder.js -d"
+  },
+  "author": "Roberto Macias",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "limax": "^3.0.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.25.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
