@@ -18,7 +18,21 @@ const getStudentById = async(req, res) => {
     return res.status(200).json(student);
 }
 
+const createStudent = async(req, res) => {
+    const { name, username, password } = req.body;
+
+    const userExists = await User.findOne({ where: { username } });
+    if (userExists) {
+        return res.status(400).json({ message: 'User already exists.' });
+    }
+
+    const student = await User.create({ name, username, password, isAdmin: false });
+
+    return res.status(201).json(student);
+}
+
 export {
     getStudents,
-    getStudentById
+    getStudentById,
+    createStudent
 }
