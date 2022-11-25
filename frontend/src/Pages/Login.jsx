@@ -24,6 +24,8 @@ export const Login = () => {
                                 <Input.Password width="300px" placeholder="Contraseña" />
                                 <Spacer y={2} />
                                 <Button size="lg" color="gradient" rounded>Ingresar</Button>
+                                <Spacer y={0.3}></Spacer>
+                                <Text h6 css={{ textAlign: 'center', fontWeight: 'light' }}>¿Olvidate tú contraseña?</Text>
                             </Col>
                         </Row>
                     </Col>
