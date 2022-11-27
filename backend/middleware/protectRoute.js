@@ -5,7 +5,7 @@ const protectRoute = async(req, res, next) => {
     // Check for token
     const { _token } = req.cookies;
     if (!_token) {
-        return res.redirect('/auth/login');
+        return res.clearCookie('_token').status(403).json({ message: 'You are not allowed to perform this operation.' });
     }
 
     // Validate token
@@ -16,12 +16,12 @@ const protectRoute = async(req, res, next) => {
         if (user) {
             req.user = user;
         } else {
-            return res.redirect('/auth/login');
+            return res.clearCookie('_token').status(403).json({ message: 'Invalid token.' });
         }
 
         return next();
     } catch (error) {
-        return res.clearCookie('_token').redirect('/auth/login');
+        return res.clearCookie('_token').status(403).json({ message: 'An error has occurred.' });
     }
 };
 

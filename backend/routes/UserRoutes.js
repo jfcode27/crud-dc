@@ -7,6 +7,6 @@ const router = express.Router();
 // Students
 router.get('/', protectRoute, getStudents);
 router.get('/:id', protectRoute, getStudentById);
-router.post('/students/create', protectRoute, createStudent);
+router.post('/create', protectRoute, createStudent);
 
 export default router;
