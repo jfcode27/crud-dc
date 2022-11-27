@@ -16,7 +16,7 @@ const Materias = () => {
         setVisible(true);
         setAction("Editar");
     }
-
+    
   return (
     <>
       <MateriaModal visible={visible} setVisible={setVisible} action={action}/>
