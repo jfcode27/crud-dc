@@ -1,36 +1,36 @@
-import { Row, Col, Spacer, Button, Container, Table } from "@nextui-org/react";
 import React from "react";
-import AlumnoModal from "../components/AlumnoModal";
+import { Row, Col, Spacer, Button, Container, Table } from "@nextui-org/react";
 import Nav from "../components/Nav";
+import MateriaModal from "../components/MateriaModal";
 
-const Home = () => {
+const Materias = () => {
     const [visible, setVisible] = React.useState(false);
     const [action, setAction] = React.useState("");
 
-    const agregarAlumno = () => {
+    const agregarMateria = () => {
         setVisible(true);
         setAction("Agregar");
     }
 
-    const editarAlumno = () => {
+    const editarMateria = () => {
         setVisible(true);
         setAction("Editar");
     }
 
   return (
     <>
-    <AlumnoModal visible={visible} setVisible={setVisible} action={action}/>
+      <MateriaModal visible={visible} setVisible={setVisible} action={action}/>
       <Nav />
       <Spacer />
       <Container>
         <Row justify="flex-end">
           <Col span={2}>
-            <Button size="sm" color="primary" ghost onPress={() => agregarAlumno()}>
+            <Button size="sm" color="primary" ghost onPress={() => agregarMateria()}>
               Agregar
             </Button>
           </Col>
           <Col span={2}>
-            <Button size="sm" color="primary" ghost onPress={() => editarAlumno()}>
+            <Button size="sm" color="primary" ghost onPress={() => editarMateria()}>
               Editar
             </Button>
           </Col>
@@ -53,10 +53,9 @@ const Home = () => {
         >
           <Table.Header>
             <Table.Column>NOMBRE</Table.Column>
-            <Table.Column>MATRÍCULA</Table.Column>
+            <Table.Column>FOLIO</Table.Column>
             <Table.Column>SEMESTRE</Table.Column>
             <Table.Column>ESCUELA</Table.Column>
-            <Table.Column>DETALLE</Table.Column>
           </Table.Header>
           <Table.Body>
             <Table.Row key="1">
@@ -64,33 +63,18 @@ const Home = () => {
               <Table.Cell>12345</Table.Cell>
               <Table.Cell>7</Table.Cell>
               <Table.Cell>Universidad de La Salle Bajío</Table.Cell>
-              <Table.Cell>
-                <Button size="sm" color="primary">
-                  Detalle
-                </Button>
-              </Table.Cell>
             </Table.Row>
             <Table.Row key="2">
               <Table.Cell>Pou 2</Table.Cell>
               <Table.Cell>12345</Table.Cell>
               <Table.Cell>7</Table.Cell>
               <Table.Cell>Universidad de La Salle Bajío</Table.Cell>
-              <Table.Cell>
-                <Button size="sm" color="primary">
-                  Detalle
-                </Button>
-              </Table.Cell>
             </Table.Row>
             <Table.Row key="3">
               <Table.Cell>Pou 3</Table.Cell>
               <Table.Cell>12345</Table.Cell>
               <Table.Cell>7</Table.Cell>
               <Table.Cell>Universidad de La Salle Bajío</Table.Cell>
-              <Table.Cell>
-                <Button size="sm" color="primary">
-                  Detalle
-                </Button>
-              </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
@@ -99,4 +83,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Materias;
