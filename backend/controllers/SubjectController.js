@@ -88,6 +88,21 @@ const createSubject = async(req, res) => {
     return res.status(201).json(subject);
 }
 
+const updateSubject = async(req, res) => {
+    const { id } = req.params;
+    const { name, teacherId } = req.body;
+
+    const subject = await Subject.findByPk(id);
+
+    if (!subject) {
+        return res.status(404).json({ message: 'Subject not found' });
+    }
+
+    await subject.update({ name, teacherId });
+
+    return res.status(200).json(subject);
+}
+
 const deleteSubject = async(req, res) => {
     const { id } = req.params;
 
@@ -108,5 +123,6 @@ export {
     getSubjectBySlug,
     getSubjectGrades,
     createSubject,
+    updateSubject,
     deleteSubject
 }
