@@ -28,7 +28,7 @@ export const Login = () => {
             const { data } = await axiosClient.post('/auth/login', { username, password });
             localStorage.setItem('token', data.token);
 
-            navigate('/');
+            navigate('/alumnos');
         } catch (error) {
             console.log(error.response.data.message);
         }

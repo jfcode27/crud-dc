@@ -10,12 +10,12 @@ const Detalle = () => {
 
   const asignarMateria = () => {
     setVisible(true);
-    setAction("Calificaciones");
+    setAction("Materias");
   };
 
   const agregarCalificaciones = () => {
     setVisible(true);
-    setAction("Materias");
+    setAction("Calificaciones");
   };
 
   return (
