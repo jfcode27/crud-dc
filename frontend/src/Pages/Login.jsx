@@ -28,7 +28,7 @@ export const Login = () => {
             const { data } = await axiosClient.post('/auth/login', { username, password });
             localStorage.setItem('token', data.token);
 
-            navigate('/');
+            navigate('/alumnos');
         } catch (error) {
             console.log(error.response.data.message);
         }
@@ -69,7 +69,7 @@ export const Login = () => {
                                     <Button size="lg" color="gradient" rounded type='submit'>Ingresar</Button>
                                 </form>
                                 <Spacer y={0.3}></Spacer>
-                                <Text h6 css={{ textAlign: 'center', fontWeight: 'light' }}>¿Olvidate tú contraseña?</Text>
+                                <Text h6 css={{ textAlign: 'center', fontWeight: 'light' }}>¿Olvidaste tú contraseña?</Text>
                             </Col>
                         </Row>
                     </Col>
