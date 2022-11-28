@@ -1,39 +1,100 @@
-import { Row, Col, Spacer, Button, Container, Table } from "@nextui-org/react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Row, Col, Spacer, Button, Container, Table, Text } from "@nextui-org/react";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import DetalleModal from "../components/DetalleModal";
 import Nav from "../components/Nav";
+import axiosClient from "../config/axios";
+
 
 const Detalle = () => {
+  const { id } = useParams();
+
   const [visible, setVisible] = React.useState(false);
   const [action, setAction] = React.useState("");
+  const [student, setStudent] = useState(null);
+  const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+  const [gradeToUpdate, setGradeToUpdate] = useState(null);
 
-  const asignarMateria = () => {
-    setVisible(true);
-    setAction("Calificaciones");
+  useEffect(() => {
+    const getStudent = async() => {
+      const { data } = await axiosClient.get(`/students/${id}`);
+      setStudent(data);
+    }
+
+    getStudent();
+  }, []);
+
+  const columns = [
+    // { name: "MATERIA", uid: "subject" },
+    { name: "PRIMER PARCIAL", uid: "firstPartial" },
+    { name: "SEGUNDO PARCIAL", uid: "secondPartial" },
+    { name: "TERCER PARCIAL", uid: "thirdPartial" },
+    { name: "PROMEDIO FINAL", uid: "finalGrade" },
+  ];
+
+  const renderCell = (user, columnKey) => {
+    const cellValue = user[columnKey];
+    switch (columnKey) {
+      // case "subject":
+      //   return (
+      //     <Text>{cellValue.name}</Text>
+      //   );
+      case "firstPartial":
+        return (
+          <Text>{cellValue}</Text>
+        );
+      case "secondPartial":
+        return (
+          <Text>{cellValue}</Text>
+        );
+      case "thirdPartial":
+        return (
+          <Text>{cellValue}</Text>
+        );
+      case "finalGrade":
+        return (
+          <Text>{cellValue}</Text>
+        );
+      default:
+        return cellValue;
+    }
   };
 
-  const agregarCalificaciones = () => {
+  const assignSubject = () => {
     setVisible(true);
     setAction("Materias");
   };
 
+  const addGrades = () => {
+    setVisible(true);
+    setAction("Calificaciones");
+  };
+
+  const getGradeToUpdate = async() => {
+    const { data } = await axiosClient.get(`/grades/${selectedSubjectId}`);
+    setGradeToUpdate(data);
+  }
+
+  if (!student) {
+    return null;
+  }
+
   return (
     <>
-      <DetalleModal visible={visible} setVisible={setVisible} action={action} />
+      <DetalleModal visible={visible} setVisible={setVisible} action={action} student={student} gradeToUpdate={gradeToUpdate} />
       <Nav />
       <Spacer />
       <Container>
         <Row justify="flex-end">
           <Col span={8}>
-            <h1>Alumno</h1>
+            <h1>{student ? `${student.name} - ${student.enrollment}` : 'Alumno'}</h1>
           </Col>
           <Col span={2}>
             <Button
               size="sm"
               color="primary"
               ghost
-              onPress={() => asignarMateria()}
+              onPress={() => assignSubject()}
             >
               Asignar Materia
             </Button>
@@ -43,7 +104,7 @@ const Detalle = () => {
               size="sm"
               color="primary"
               ghost
-              onPress={() => agregarCalificaciones()}
+              onPress={() => addGrades()}
             >
               Agregar calificaciones
             </Button>
@@ -58,23 +119,29 @@ const Detalle = () => {
             height: "auto",
             minWidth: "100%",
           }}
-          selectionMode="multiple"
+          selectionMode="single"
+          onSelectionChange={(selected) => { setSelectedSubjectId(selected.anchorKey); getGradeToUpdate(selected.anchorKey); }}
+          disallowEmptySelection
         >
-          <Table.Header>
-            <Table.Column>MATERIA</Table.Column>
-            <Table.Column>1ER PARCIAL</Table.Column>
-            <Table.Column>2DO PARCIAL</Table.Column>
-            <Table.Column>3ER PARCIAL</Table.Column>
-            <Table.Column>PROMEDIO FINAL</Table.Column>
+          <Table.Header columns={columns}>
+            {(column) => (
+              <Table.Column
+                key={column.uid}
+                hideHeader={column.uid === "actions"}
+                align={column.uid === "actions" ? "center" : "start"}
+              >
+                {column.name}
+              </Table.Column>
+            )}
           </Table.Header>
-          <Table.Body>
-            <Table.Row key="1">
-              <Table.Cell>INTRODUCCION AL POU</Table.Cell>
-              <Table.Cell>10</Table.Cell>
-              <Table.Cell>10</Table.Cell>
-              <Table.Cell>10</Table.Cell>
-              <Table.Cell>10</Table.Cell>
-            </Table.Row>
+          <Table.Body items={student.grades}>
+            {(item) => (
+              <Table.Row>
+                {(columnKey) => (
+                  <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
+                )}
+              </Table.Row>
+            )}
           </Table.Body>
         </Table>
         <Spacer />

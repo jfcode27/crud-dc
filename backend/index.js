@@ -4,7 +4,9 @@ import cors from 'cors';
 import db from './config/database.js';
 import authRoutes from './routes/AuthRoutes.js';
 import studentRoutes from './routes/StudentRoutes.js';
+import teacherRoutes from './routes/TeacherRoutes.js';
 import subjectRoutes from './routes/SubjectRoutes.js';
+import gradeRoutes from './routes/GradeRoutes.js';
 
 const app = express();
 
@@ -31,6 +33,8 @@ try {
 app.use('/auth', authRoutes);
 app.use('/subjects', subjectRoutes);
 app.use('/students', studentRoutes);
+app.use('/teachers', teacherRoutes);
+app.use('/grades', gradeRoutes);
 
 // Set port
 const port = process.env.PORT || 4000;

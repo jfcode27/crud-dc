@@ -1,16 +1,53 @@
 import { Modal, Input, Row, Checkbox, Button, Text } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosClient from "../config/axios";
 
-const AlumnoModal = ({ visible, setVisible, action }) => {
-  const [name, setName] = useState('');
-  const [enrollment, setEnrollment] = useState('');
-  const [semester, setSemester] = useState('');
-  const [school, setSchool] = useState('');  
+const AlumnoModal = ({ visible, setVisible, action, studentToUpdate, setStudentToUpdate }) => {
+  const navigate = useNavigate();
+
+  const modalInitialState = {
+    name: "",
+    enrollment: "",
+    semester: "",
+    school: "",
+  }
+
+  const [formData, setFormData] = useState(modalInitialState);
+
+  useEffect(() => {
+    if (studentToUpdate) {
+      action === 'Agregar' ? setFormData(modalInitialState) : setFormData(studentToUpdate);
+    }
+  }, [studentToUpdate]);
+  
+  const handleInputChange = (event) => {
+    setFormData({...formData, [event.target.name]: event.target.value});
+  }
 
   const handleFormSubmit = async(event) => {
     event.preventDefault();
     
-    
+    if (action === 'Agregar') {
+      console.log(formData);
+      await axiosClient.post('/students/create', formData);
+    } else {
+      await axiosClient.put(`/students/${studentToUpdate._id}`, formData);
+    }
+
+    navigate('/');
+  }
+
+  const handleModalClose = () => {
+    setVisible(false);
+    setFormData(modalInitialState);
+    setStudentToUpdate(null);
+  }
+
+  if (action === 'Editar') {
+    if (!studentToUpdate) {
+      return null;
+    }
   }
         
   return (
@@ -20,7 +57,7 @@ const AlumnoModal = ({ visible, setVisible, action }) => {
         blur
         aria-labelledby="modal-title"
         open={visible}
-        onClose={() => setVisible(false)}
+        onClose={() => handleModalClose()}
       >
         <Modal.Header>
           <Text id="modal-title" b size={18}>
@@ -36,6 +73,9 @@ const AlumnoModal = ({ visible, setVisible, action }) => {
               color="primary"
               size="lg"
               placeholder="Nombre del alumno"
+              value={formData.name}
+              name="name"
+              onChange={handleInputChange}
             />
             <Input
               clearable
@@ -44,6 +84,10 @@ const AlumnoModal = ({ visible, setVisible, action }) => {
               color="primary"
               size="lg"
               placeholder="Matrícula"
+              value={formData.enrollment}
+              type="number"
+              name="enrollment"
+              onChange={handleInputChange}
             />
             <Input
               clearable
@@ -52,6 +96,10 @@ const AlumnoModal = ({ visible, setVisible, action }) => {
               color="primary"
               size="lg"
               placeholder="Semestre"
+              value={formData.semester}
+              type="number"
+              name="semester"
+              onChange={handleInputChange}
             />
             <Input
               clearable
@@ -60,6 +108,9 @@ const AlumnoModal = ({ visible, setVisible, action }) => {
               color="primary"
               size="lg"
               placeholder="Escuela"
+              value={formData.school}
+              name="school"
+              onChange={handleInputChange}
             />
           </form>
           <Button auto onPress={() => setVisible(false)} type={'submit'}>{action}</Button>

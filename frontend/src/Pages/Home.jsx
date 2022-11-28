@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Spacer, Button, Container, Table, Text } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AlumnoModal from "../components/AlumnoModal";
 import Nav from "../components/Nav";
 import axiosClient from '../config/axios';
@@ -10,6 +10,9 @@ const Home = () => {
     const [visible, setVisible] = React.useState(false);
     const [action, setAction] = React.useState("");
     const [studentToUpdate, setStudentToUpdate] = useState(null);
+    const [selectedStudentId, setSelectedStudentId] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
       const loadStudents = async() => {
@@ -50,7 +53,7 @@ const Home = () => {
         case "detail":
           return (
             <Link
-              to="/detalle"
+              to={`/detalle/${user.id}`}
               style={{ textDecoration: "none", color: "white" }}
             >
               <Button size="sm" color="primary">
@@ -63,19 +66,42 @@ const Home = () => {
       }
     };
 
-  const agregarAlumno = () => {
+  const createStudent = () => {
+    setStudentToUpdate(null);
     setVisible(true);
     setAction("Agregar");
   };
+  
+  const getStudentToUpdate = async(id) => {
+    const { data } = await axiosClient.get(`/students/${id}`);
+    setStudentToUpdate(data);
+  };
 
-  const editarAlumno = () => {
-    setVisible(true);
-    setAction("Editar");
+  const updateStudent = () => {
+    if (studentToUpdate) {
+      setVisible(true);
+      setAction("Editar");
+    }
+  };
+
+  const deleteStudent = async () => {
+    if (selectedStudentId) {
+      await axiosClient.delete(`/students/${selectedStudentId}`);
+      await axiosClient.get('/students');
+
+      navigate(0);
+    }
   };
 
   return (
     <>
-      <AlumnoModal visible={visible} setVisible={setVisible} action={action} />
+      <AlumnoModal 
+        visible={visible} 
+        setVisible={setVisible} 
+        action={action} 
+        studentToUpdate={studentToUpdate}
+        setStudentToUpdate={setStudentToUpdate}
+      />
 
       <Nav />
 
@@ -88,7 +114,7 @@ const Home = () => {
               size="sm"
               color="primary"
               ghost
-              onPress={() => agregarAlumno()}
+              onPress={() => createStudent()}
             >
               Agregar
             </Button>
@@ -98,13 +124,18 @@ const Home = () => {
               size="sm"
               color="primary"
               ghost
-              onPress={() => editarAlumno()}
+              onPress={() => updateStudent()}
             >
               Editar
             </Button>
           </Col>
           <Col span={2}>
-            <Button size="sm" color="primary" ghost>
+            <Button 
+              size="sm" 
+              color="primary" 
+              ghost
+              onPress={() => deleteStudent()}
+            >
               Eliminar
             </Button>
           </Col>
@@ -118,7 +149,8 @@ const Home = () => {
             height: "auto",
             minWidth: "100%",
           }}
-          selectionMode="multiple"
+          selectionMode="single"
+          onSelectionChange={(key) => { setSelectedStudentId(key.anchorKey); getStudentToUpdate(key.anchorKey)}}
         >
           <Table.Header columns={columns}>
             {(column) => (

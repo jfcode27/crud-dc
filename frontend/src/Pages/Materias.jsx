@@ -3,11 +3,15 @@ import { Row, Col, Spacer, Button, Container, Table, Text } from "@nextui-org/re
 import Nav from "../components/Nav";
 import MateriaModal from "../components/MateriaModal";
 import axiosClient from '../config/axios';
+import { useNavigate } from "react-router-dom";
 
 const Materias = () => {
     const [subjects, setSubjects] = useState([]);
     const [visible, setVisible] = React.useState(false);
     const [action, setAction] = React.useState("");
+    const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
       const loadSubjects = async() => {
@@ -20,8 +24,7 @@ const Materias = () => {
     
     const columns = [
       { name: "NOMBRE", uid: "name" },
-      { name: "MAESTRO", uid: "teacher" },
-      { name: "DETALLE", uid: "detail" }
+      { name: "MAESTRO", uid: "teacher" }
     ];
 
     const renderCell = (user, columnKey) => {
@@ -35,29 +38,28 @@ const Materias = () => {
           return (
             <Text>{cellValue.name}</Text>
           );
-        case "detail":
-          return (
-            <Button
-              size="sm"
-              color="primary"
-            >
-              Detalle
-            </Button>
-          );
         default:
           return cellValue;
       }
     };
 
-    const agregarMateria = () => {
-        setVisible(true);
-        setAction("Agregar");
-    }
+    const addSubject = () => {
+      setVisible(true);
+      setAction("Agregar");
+    };
 
-    const editarMateria = () => {
-        setVisible(true);
-        setAction("Editar");
-    }
+    const updateSubject = () => {
+      setVisible(true);
+      setAction("Editar");
+    };
+
+    const deleteSubject = async() => {
+      if (selectedSubjectId) {
+        await axiosClient.delete(`/subjects/${selectedSubjectId}`);
+  
+        navigate(0);
+      }
+    };
 
   return (
     <>
@@ -67,17 +69,17 @@ const Materias = () => {
       <Container>
         <Row justify="flex-end">
           <Col span={2}>
-            <Button size="sm" color="primary" ghost onPress={() => agregarMateria()}>
+            <Button size="sm" color="primary" ghost onPress={() => addSubject()}>
               Agregar
             </Button>
           </Col>
           <Col span={2}>
-            <Button size="sm" color="primary" ghost onPress={() => editarMateria()}>
+            <Button size="sm" color="primary" ghost onPress={() => updateSubject()}>
               Editar
             </Button>
           </Col>
           <Col span={2}>
-            <Button size="sm" color="primary" ghost>
+            <Button size="sm" color="primary" ghost onPress={() => deleteSubject()}>
               Eliminar
             </Button>
           </Col>
@@ -91,7 +93,8 @@ const Materias = () => {
             height: "auto",
             minWidth: "100%",
           }}
-          selectionMode="multiple"
+          selectionMode="single"
+          onSelectionChange={(selected) => setSelectedSubjectId(selected.anchorKey)}
         >
           <Table.Header columns={columns}>
             {(column) => (

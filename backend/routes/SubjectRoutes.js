@@ -3,7 +3,9 @@ import {
     getSubjects, 
     getSubjectById, 
     getSubjectBySlug,
-    getSubjectGrades
+    getSubjectGrades,
+    createSubject,
+    deleteSubject
 } from "../controllers/SubjectController.js";
 
 const router = express.Router();
@@ -13,5 +15,7 @@ router.get('/:id', getSubjectById);
 // router.get('/:slug', getSubjectBySlug);
 router.get('/:id/grades', getSubjectGrades);
 
+router.post('/create', createSubject);
+router.delete('/:id', deleteSubject);
 
 export default router;

@@ -1,8 +1,46 @@
 import { Modal, Input, Row, Checkbox, Button, Text } from "@nextui-org/react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosClient from "../config/axios";
 
 const MateriaModal = ({ visible, setVisible, action }) => {
-    
-        
+  const [teachers, setTeachers] = useState(null);
+
+  // Form data
+  const [name, setName] = useState('');
+  const [teacherId, setTeacherId] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getTeachers = async() => {
+      const { data } = await axiosClient.get('/teachers');
+      setTeachers(data);
+    }
+
+    getTeachers();
+  }, []);
+
+  const handleFormSubmit = async(event) => {
+    event.preventDefault();
+
+    if (action === 'Agregar') {
+      await axiosClient.post('/subjects/create', {
+        name,
+        teacherId
+      });
+    } else {
+      await axiosClient.put(`/subjects/${teacherId}`, {
+        name,
+        teacherId
+      });
+    }
+
+    setVisible(false);
+    navigate(0);
+  }
+  
   return (
     <div>
       <Modal
@@ -18,42 +56,28 @@ const MateriaModal = ({ visible, setVisible, action }) => {
           </Text>
         </Modal.Header>
         <Modal.Body>
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Nombre de materia"
-          />
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Folio"
-            />
+          <form action="" onSubmit={handleFormSubmit}>
             <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Semestre"
+              clearable
+              bordered
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Nombre de la materia"
+              name="name"
+              onChange={(event) => setName(event.target.value)}
             />
-            <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Escuela"
-            />
+            <select name="teacherId" id="" onChange={(event) => setTeacherId(parseInt(event.target.value))}>
+              {
+                teachers && teachers.map(teacher => (
+                  <option key={teacher.id} value={teacher.id}>{teacher.name}</option>
+                ))
+              }
+            </select>
+
+            <Button auto type='submit'>{action}</Button>
+          </form>
         </Modal.Body>
-        <Modal.Footer>
-            <Button auto onClick={() => setVisible(false)}>{action}</Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
