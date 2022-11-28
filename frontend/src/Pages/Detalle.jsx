@@ -62,7 +62,7 @@ const Detalle = () => {
 
   const assignSubject = () => {
     setVisible(true);
-    setAction("Materias");
+    setAction("Calificaciones");
   };
 
   const addGrades = () => {
@@ -147,7 +147,7 @@ const Detalle = () => {
         <Spacer />
         <Row justify="center">
           <Col span={2}>
-            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <Link to="/alumnos" style={{ textDecoration: "none", color: "white" }}>
               <Button size="lg" color="primary">
                 Regresar
               </Button>

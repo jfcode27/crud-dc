@@ -10,14 +10,14 @@ const Nav = () => {
         <Image src={logo} width={65} height={65} />
       </Navbar.Brand>
       <Navbar.Content hideIn="xs">
-        {location.pathname === "/" ? (
+        {location.pathname === "/alumnos" ? (
           <>
-            <Navbar.Link isActive href="/">Alumnos</Navbar.Link>
+            <Navbar.Link isActive href="/alumnos">Alumnos</Navbar.Link>
             <Navbar.Link href="/materias">Materias</Navbar.Link>
           </>
         ) : (
           <>
-            <Navbar.Link href="/">Alumnos</Navbar.Link>
+            <Navbar.Link href="/alumnos">Alumnos</Navbar.Link>
             <Navbar.Link isActive href="/materias">Materias</Navbar.Link>
           </>
         )}
