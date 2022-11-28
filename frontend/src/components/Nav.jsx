@@ -12,12 +12,12 @@ const Nav = () => {
       <Navbar.Content hideIn="xs">
         {location.pathname === "/" ? (
           <>
-            <Navbar.Link isActive href="/">Alumnos</Navbar.Link>
+            <Navbar.Link isActive href="/alumnos">Alumnos</Navbar.Link>
             <Navbar.Link href="/materias">Materias</Navbar.Link>
           </>
         ) : (
           <>
-            <Navbar.Link href="/">Alumnos</Navbar.Link>
+            <Navbar.Link href="/alumnos">Alumnos</Navbar.Link>
             <Navbar.Link isActive href="/materias">Materias</Navbar.Link>
           </>
         )}

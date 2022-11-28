@@ -80,7 +80,7 @@ const Detalle = () => {
         <Spacer />
         <Row justify="center">
           <Col span={2}>
-            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <Link to="/alumnos" style={{ textDecoration: "none", color: "white" }}>
               <Button size="lg" color="primary">
                 Regresar
               </Button>
