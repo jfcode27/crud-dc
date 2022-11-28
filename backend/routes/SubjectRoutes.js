@@ -5,14 +5,13 @@ import {
     getSubjectBySlug,
     getSubjectGrades
 } from "../controllers/SubjectController.js";
-import protectRoute from '../middleware/protectRoute.js';
 
 const router = express.Router();
 
-router.get('/', protectRoute, getSubjects);
-router.get('/:id', protectRoute, getSubjectById);
+router.get('/',  getSubjects);
+router.get('/:id', getSubjectById);
 // router.get('/:slug', getSubjectBySlug);
-router.get('/:id/grades', protectRoute, getSubjectGrades);
+router.get('/:id/grades', getSubjectGrades);
 
 
 export default router;

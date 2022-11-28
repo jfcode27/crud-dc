@@ -1,7 +1,17 @@
 import { Modal, Input, Row, Checkbox, Button, Text } from "@nextui-org/react";
+import { useState } from "react";
 
 const AlumnoModal = ({ visible, setVisible, action }) => {
+  const [name, setName] = useState('');
+  const [enrollment, setEnrollment] = useState('');
+  const [semester, setSemester] = useState('');
+  const [school, setSchool] = useState('');  
+
+  const handleFormSubmit = async(event) => {
+    event.preventDefault();
     
+    
+  }
         
   return (
     <div>
@@ -18,42 +28,42 @@ const AlumnoModal = ({ visible, setVisible, action }) => {
           </Text>
         </Modal.Header>
         <Modal.Body>
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Nombre del alumno"
-          />
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Matrícula"
+          <form action="" onSubmit={handleFormSubmit}>
+            <Input
+              clearable
+              bordered
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Nombre del alumno"
             />
             <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Semestre"
+              clearable
+              bordered
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Matrícula"
             />
             <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Escuela"
+              clearable
+              bordered
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Semestre"
             />
+            <Input
+              clearable
+              bordered
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Escuela"
+            />
+          </form>
+          <Button auto onPress={() => setVisible(false)} type={'submit'}>{action}</Button>
         </Modal.Body>
-        <Modal.Footer>
-            <Button auto onClick={() => setVisible(false)}>{action}</Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

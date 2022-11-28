@@ -1,11 +1,11 @@
 const grades = [
     {
-        studentId: '3',
+        studentId: '1',
         subjectId: '2',
         grade: 9.5
     },
     {
-        studentId: '3',
+        studentId: '2',
         subjectId: '2',
         grade: 8
     },

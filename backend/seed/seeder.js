@@ -1,8 +1,9 @@
 import { exit } from 'node:process';
-import users from './users.js';
+import teachers from './teachers.js';
+import students from './students.js';
 import subjects from './subjects.js';
 import grades from './grades.js';
-import { User, Subject, Grade } from '../models/index.js';
+import { Teacher, Student, Subject, Grade } from '../models/index.js';
 import db from '../config/database.js';
 
 const importData = async() => {
@@ -15,7 +16,8 @@ const importData = async() => {
 
         // Insert data
         await Promise.all([
-            User.bulkCreate(users),
+            Teacher.bulkCreate(teachers),
+            Student.bulkCreate(students),
             Subject.bulkCreate(subjects),
             Grade.bulkCreate(grades)
         ]);
