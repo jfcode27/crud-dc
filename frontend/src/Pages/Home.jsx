@@ -8,6 +8,7 @@ const Home = () => {
     const [students, setStudents] = useState([]);
     const [visible, setVisible] = React.useState(false);
     const [action, setAction] = React.useState("");
+    const [studentToUpdate, setStudentToUpdate] = useState(null);
 
     useEffect(() => {
       const loadStudents = async() => {
@@ -71,7 +72,7 @@ const Home = () => {
 
   return (
     <>
-      <AlumnoModal visible={visible} setVisible={setVisible} action={action}/>
+      <AlumnoModal visible={visible} setVisible={setVisible} action={action} />
 
       <Nav />
 
