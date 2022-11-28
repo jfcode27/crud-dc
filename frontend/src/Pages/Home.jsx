@@ -1,36 +1,47 @@
 import { Row, Col, Spacer, Button, Container, Table } from "@nextui-org/react";
 import React from "react";
+import { Link } from "react-router-dom";
 import AlumnoModal from "../components/AlumnoModal";
 import Nav from "../components/Nav";
 
 const Home = () => {
-    const [visible, setVisible] = React.useState(false);
-    const [action, setAction] = React.useState("");
+  const [visible, setVisible] = React.useState(false);
+  const [action, setAction] = React.useState("");
 
-    const agregarAlumno = () => {
-        setVisible(true);
-        setAction("Agregar");
-    }
+  const agregarAlumno = () => {
+    setVisible(true);
+    setAction("Agregar");
+  };
 
-    const editarAlumno = () => {
-        setVisible(true);
-        setAction("Editar");
-    }
+  const editarAlumno = () => {
+    setVisible(true);
+    setAction("Editar");
+  };
 
   return (
     <>
-    <AlumnoModal visible={visible} setVisible={setVisible} action={action}/>
+      <AlumnoModal visible={visible} setVisible={setVisible} action={action} />
       <Nav />
       <Spacer />
       <Container>
         <Row justify="flex-end">
           <Col span={2}>
-            <Button size="sm" color="primary" ghost onPress={() => agregarAlumno()}>
+            <Button
+              size="sm"
+              color="primary"
+              ghost
+              onPress={() => agregarAlumno()}
+            >
               Agregar
             </Button>
           </Col>
           <Col span={2}>
-            <Button size="sm" color="primary" ghost onPress={() => editarAlumno()}>
+            <Button
+              size="sm"
+              color="primary"
+              ghost
+              onPress={() => editarAlumno()}
+            >
               Editar
             </Button>
           </Col>
@@ -65,9 +76,14 @@ const Home = () => {
               <Table.Cell>7</Table.Cell>
               <Table.Cell>Universidad de La Salle Bajío</Table.Cell>
               <Table.Cell>
-                <Button size="sm" color="primary">
-                  Detalle
-                </Button>
+                <Link
+                  to="/detalle"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  <Button size="sm" color="primary">
+                    Detalle
+                  </Button>
+                </Link>
               </Table.Cell>
             </Table.Row>
             <Table.Row key="2">
