@@ -1,15 +1,17 @@
-import User from "./User.js";
+import Teacher from "./Teacher.js";
 import Subject from "./Subject.js";
 import Grade from "./Grade.js";
+import Student from "./Student.js"
 
 // Associations
-Subject.belongsTo(User, { foreignKey: 'teacherId', as: 'teacher' });
+Subject.belongsTo(Teacher, { foreignKey: 'teacherId', as: 'teacher' });
 
-Grade.belongsTo(User, { foreignKey: 'studentId', as: 'student' });
+Grade.belongsTo(Student, { foreignKey: 'studentId', as: 'student' });
 Grade.belongsTo(Subject, { foreignKey: 'subjectId', as: 'subject' });
 
 export {
-    User,
+    Teacher,
     Subject,
-    Grade
+    Grade,
+    Student
 }

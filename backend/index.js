@@ -1,9 +1,9 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import csrf from 'csurf';
+import cors from 'cors';
 import db from './config/database.js';
 import authRoutes from './routes/AuthRoutes.js';
-import userRoutes from './routes/UserRoutes.js';
+import studentRoutes from './routes/StudentRoutes.js';
 import subjectRoutes from './routes/SubjectRoutes.js';
 
 const app = express();
@@ -12,11 +12,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Enable CORS
+app.use(cors());
+
 // Enable CookieParser
 app.use(cookieParser());
-
-// Enable CSRF
-// app.use(csrf({ cookie: true }));
 
 // Connect to database
 try {
@@ -30,7 +30,7 @@ try {
 // Routing
 app.use('/auth', authRoutes);
 app.use('/subjects', subjectRoutes);
-app.use('/students', userRoutes);
+app.use('/students', studentRoutes);
 
 // Set port
 const port = process.env.PORT || 4000;

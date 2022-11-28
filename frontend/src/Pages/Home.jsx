@@ -1,11 +1,63 @@
-import { Row, Col, Spacer, Button, Container, Table } from "@nextui-org/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Spacer, Button, Container, Table, Text } from "@nextui-org/react";
 import AlumnoModal from "../components/AlumnoModal";
 import Nav from "../components/Nav";
+import axiosClient from '../config/axios';
 
 const Home = () => {
+    const [students, setStudents] = useState([]);
     const [visible, setVisible] = React.useState(false);
     const [action, setAction] = React.useState("");
+
+    useEffect(() => {
+      const loadStudents = async() => {
+        const { data } = await axiosClient.get('/students');
+        setStudents(data);
+      }
+
+      loadStudents();
+    }, []);
+    
+    const columns = [
+      { name: "NOMBRE", uid: "name" },
+      { name: "MATRÍCULA", uid: "enrollment" },
+      { name: "SEMESTRE", uid: "semester" },
+      { name: "ESCUELA", uid: "school" },
+      { name: "DETALLE", uid: "detail" }
+    ];
+
+    const renderCell = (user, columnKey) => {
+      const cellValue = user[columnKey];
+      switch (columnKey) {
+        case "name":
+          return (
+            <Text>{cellValue}</Text>
+          );
+        case "enrollment":
+          return (
+            <Text>{cellValue}</Text>
+          );
+        case "semester":
+          return (
+            <Text>{cellValue}</Text>
+          );
+        case "school":
+          return (
+            <Text>{cellValue}</Text>
+          );
+        case "detail":
+          return (
+            <Button
+              size="sm"
+              color="primary"
+            >
+              Detalle
+            </Button>
+          );
+        default:
+          return cellValue;
+      }
+    };
 
     const agregarAlumno = () => {
         setVisible(true);
@@ -19,9 +71,12 @@ const Home = () => {
 
   return (
     <>
-    <AlumnoModal visible={visible} setVisible={setVisible} action={action}/>
+      <AlumnoModal visible={visible} setVisible={setVisible} action={action}/>
+
       <Nav />
+
       <Spacer />
+      
       <Container>
         <Row justify="flex-end">
           <Col span={2}>
@@ -51,47 +106,25 @@ const Home = () => {
           }}
           selectionMode="multiple"
         >
-          <Table.Header>
-            <Table.Column>NOMBRE</Table.Column>
-            <Table.Column>MATRÍCULA</Table.Column>
-            <Table.Column>SEMESTRE</Table.Column>
-            <Table.Column>ESCUELA</Table.Column>
-            <Table.Column>DETALLE</Table.Column>
+          <Table.Header columns={columns}>
+            {(column) => (
+              <Table.Column
+                key={column.uid}
+                hideHeader={column.uid === "actions"}
+                align={column.uid === "actions" ? "center" : "start"}
+              >
+                {column.name}
+              </Table.Column>
+            )}
           </Table.Header>
-          <Table.Body>
-            <Table.Row key="1">
-              <Table.Cell>Pou</Table.Cell>
-              <Table.Cell>12345</Table.Cell>
-              <Table.Cell>7</Table.Cell>
-              <Table.Cell>Universidad de La Salle Bajío</Table.Cell>
-              <Table.Cell>
-                <Button size="sm" color="primary">
-                  Detalle
-                </Button>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row key="2">
-              <Table.Cell>Pou 2</Table.Cell>
-              <Table.Cell>12345</Table.Cell>
-              <Table.Cell>7</Table.Cell>
-              <Table.Cell>Universidad de La Salle Bajío</Table.Cell>
-              <Table.Cell>
-                <Button size="sm" color="primary">
-                  Detalle
-                </Button>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row key="3">
-              <Table.Cell>Pou 3</Table.Cell>
-              <Table.Cell>12345</Table.Cell>
-              <Table.Cell>7</Table.Cell>
-              <Table.Cell>Universidad de La Salle Bajío</Table.Cell>
-              <Table.Cell>
-                <Button size="sm" color="primary">
-                  Detalle
-                </Button>
-              </Table.Cell>
-            </Table.Row>
+          <Table.Body items={students}>
+            {(item) => (
+              <Table.Row>
+                {(columnKey) => (
+                  <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
+                )}
+              </Table.Row>
+            )}
           </Table.Body>
         </Table>
       </Container>

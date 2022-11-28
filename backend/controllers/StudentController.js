@@ -1,7 +1,7 @@
-import { User } from '../models/index.js';
+import { Student } from '../models/index.js';
 
 const getStudents = async(req, res) => {
-    const students = await User.findAll({ where: { isAdmin: false } });
+    const students = await Student.findAll();
 
     return res.status(200).json(students);
 }
@@ -9,7 +9,7 @@ const getStudents = async(req, res) => {
 const getStudentById = async(req, res) => {
     const { id } = req.params;
 
-    const student = await User.findOne({ where: { id, isAdmin: false }});
+    const student = await Student.findOne({ where: { id }});
 
     if (!student) {
         return res.status(400).json({ message: 'Student not found.' });
@@ -19,14 +19,14 @@ const getStudentById = async(req, res) => {
 }
 
 const createStudent = async(req, res) => {
-    const { name, username, password } = req.body;
+    const { name, enrollment, semester, school } = req.body;
 
-    const userExists = await User.findOne({ where: { username } });
-    if (userExists) {
+    const studentExists = await Student.findOne({ where: { enrollment } });
+    if (studentExists) {
         return res.status(400).json({ message: 'User already exists.' });
     }
 
-    const student = await User.create({ name, username, password, isAdmin: false });
+    const student = await Student.create({ name, enrollment, semester, school });
 
     return res.status(201).json(student);
 }
