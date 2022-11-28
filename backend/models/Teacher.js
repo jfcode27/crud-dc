@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import bcrypt from 'bcrypt';
 import db from '../config/database.js';
 
-const User = db.define('users', {
+const Teacher = db.define('teachers', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -14,23 +14,26 @@ const User = db.define('users', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    isAdmin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
     }
 }, {
     hooks: {
-        beforeCreate: async function(user) {
+        beforeCreate: async function(teacher) {
             const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(user.password, salt);
+            teacher.password = await bcrypt.hash(teacher.password, salt);
+        }
+    },
+    scopes: {
+        removePassword: {
+            attributes: {
+                exclude: ['password', 'createdAt', 'updatedAt']
+            }
         }
     }
 });
 
 // Custom methods
-User.prototype.verifyPassword = function(password) {
+Teacher.prototype.verifyPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 }
 
-export default User;
+export default Teacher;
