@@ -10,6 +10,7 @@ const Materias = () => {
     const [visible, setVisible] = React.useState(false);
     const [action, setAction] = React.useState("");
     const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+    const [subjectToUpdate, setSubjectToUpdate] = useState(null);
 
     const navigate = useNavigate();
 
@@ -61,11 +62,27 @@ const Materias = () => {
       }
     };
 
+    const getSubjectToUpdate = async() => {
+      if (selectedSubjectId) {
+        const { data } = await axiosClient.get(`/subjects/${selectedSubjectId}`);
+        setSubjectToUpdate(data);
+      }
+    };
+
   return (
     <>
-      <MateriaModal visible={visible} setVisible={setVisible} action={action}/>
+      <MateriaModal 
+        visible={visible} 
+        setVisible={setVisible} 
+        action={action} 
+        selectedSubjectId={selectedSubjectId} 
+        subjectToUpdate={subjectToUpdate}
+      />
+
       <Nav />
+
       <Spacer />
+      
       <Container>
         <Row justify="flex-end">
           <Col span={2}>
@@ -94,7 +111,7 @@ const Materias = () => {
             minWidth: "100%",
           }}
           selectionMode="single"
-          onSelectionChange={(selected) => setSelectedSubjectId(selected.anchorKey)}
+          onSelectionChange={(selected) => { setSelectedSubjectId(selected.anchorKey); getSubjectToUpdate() }}
         >
           <Table.Header columns={columns}>
             {(column) => (

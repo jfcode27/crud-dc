@@ -25,7 +25,7 @@ const Detalle = () => {
   }, []);
 
   const columns = [
-    // { name: "MATERIA", uid: "subject" },
+    { name: "MATERIA", uid: "subject" },
     { name: "PRIMER PARCIAL", uid: "firstPartial" },
     { name: "SEGUNDO PARCIAL", uid: "secondPartial" },
     { name: "TERCER PARCIAL", uid: "thirdPartial" },
@@ -35,10 +35,10 @@ const Detalle = () => {
   const renderCell = (user, columnKey) => {
     const cellValue = user[columnKey];
     switch (columnKey) {
-      // case "subject":
-      //   return (
-      //     <Text>{cellValue.name}</Text>
-      //   );
+      case "subject":
+        return (
+          <Text>{cellValue.name}</Text>
+        );
       case "firstPartial":
         return (
           <Text>{cellValue}</Text>

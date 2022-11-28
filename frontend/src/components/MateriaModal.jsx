@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../config/axios";
 
-const MateriaModal = ({ visible, setVisible, action }) => {
+const MateriaModal = ({ visible, setVisible, action, selectedSubjectId, subjectToUpdate }) => {
   const [teachers, setTeachers] = useState(null);
 
   // Form data
@@ -19,8 +19,13 @@ const MateriaModal = ({ visible, setVisible, action }) => {
       setTeachers(data);
     }
 
+    if (subjectToUpdate) {
+      setName(subjectToUpdate.name);
+      setTeacherId(subjectToUpdate.teacher.id);
+    }
+
     getTeachers();
-  }, []);
+  }, [subjectToUpdate]);
 
   const handleFormSubmit = async(event) => {
     event.preventDefault();
@@ -31,7 +36,7 @@ const MateriaModal = ({ visible, setVisible, action }) => {
         teacherId
       });
     } else {
-      await axiosClient.put(`/subjects/${teacherId}`, {
+      await axiosClient.put(`/subjects/${selectedSubjectId}`, {
         name,
         teacherId
       });
@@ -65,9 +70,10 @@ const MateriaModal = ({ visible, setVisible, action }) => {
               size="lg"
               placeholder="Nombre de la materia"
               name="name"
+              value={name}
               onChange={(event) => setName(event.target.value)}
             />
-            <select name="teacherId" id="" onChange={(event) => setTeacherId(parseInt(event.target.value))}>
+            <select name="teacherId" id="" onChange={(event) => setTeacherId(parseInt(event.target.value))} defaultValue={teacherId}>
               {
                 teachers && teachers.map(teacher => (
                   <option key={teacher.id} value={teacher.id}>{teacher.name}</option>

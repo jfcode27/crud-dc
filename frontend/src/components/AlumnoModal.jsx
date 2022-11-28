@@ -29,13 +29,12 @@ const AlumnoModal = ({ visible, setVisible, action, studentToUpdate, setStudentT
     event.preventDefault();
     
     if (action === 'Agregar') {
-      console.log(formData);
       await axiosClient.post('/students/create', formData);
     } else {
-      await axiosClient.put(`/students/${studentToUpdate._id}`, formData);
+      await axiosClient.put(`/students/${studentToUpdate.id}`, formData);
     }
 
-    navigate('/');
+    navigate(0);
   }
 
   const handleModalClose = () => {
@@ -112,8 +111,9 @@ const AlumnoModal = ({ visible, setVisible, action, studentToUpdate, setStudentT
               name="school"
               onChange={handleInputChange}
             />
+
+            <Button auto onPress={() => setVisible(false)} type={'submit'}>{action}</Button>
           </form>
-          <Button auto onPress={() => setVisible(false)} type={'submit'}>{action}</Button>
         </Modal.Body>
       </Modal>
     </div>

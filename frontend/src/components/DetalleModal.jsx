@@ -7,12 +7,25 @@ const DetalleModal = ({ visible, setVisible, action, student, gradeToUpdate }) =
   const [subjects, setSubjects] = useState(null);
   const [subjectId, setSubjectId] = useState(null);
 
+  const [firstPartial, setFirstPartial] = useState(0);
+  const [secondPartial, setSecondPartial] = useState(0);
+  const [thirdPartial, setThirdPartial] = useState(0);
+  const [finalGrade, setFinalGrade] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const getSubjects = async() => {
       const { data } = await axiosClient.get('/subjects');
       setSubjects(data);
+    }
+
+    if (gradeToUpdate) {
+      setSubjectId(gradeToUpdate.subject.id);
+      setFirstPartial(gradeToUpdate.firstPartial);
+      setSecondPartial(gradeToUpdate.secondPartial);
+      setThirdPartial(gradeToUpdate.thirdPartial);
+      setFinalGrade(gradeToUpdate.finalGrade);
     }
 
     getSubjects();
@@ -24,6 +37,21 @@ const DetalleModal = ({ visible, setVisible, action, student, gradeToUpdate }) =
     await axiosClient.post(`/students/${student.id}/assign`, { subjectId });
 
     navigate(0);
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    if (action === 'Calificaciones') {
+      await axiosClient.put(`/grades/${gradeToUpdate.id}`, {
+        subjectId,
+        firstPartial,
+        secondPartial,
+        thirdPartial
+      });
+
+      navigate(0);
+    }
   }
 
   return (
@@ -44,7 +72,7 @@ const DetalleModal = ({ visible, setVisible, action, student, gradeToUpdate }) =
           {
             action === "Calificaciones" ? (
             <>
-            <form action="" >
+            <form action="" onSubmit={handleFormSubmit}>
               <Input
                 clearable
                 bordered
@@ -53,7 +81,8 @@ const DetalleModal = ({ visible, setVisible, action, student, gradeToUpdate }) =
                 size="lg"
                 placeholder="Parcial 1"
                 name="firstPartial"
-                value={gradeToUpdate.firstPartial}
+                value={firstPartial}
+                onChange={(event) => setFirstPartial(Number(event.target.value))}
               />
               <Input
                 clearable
@@ -63,7 +92,8 @@ const DetalleModal = ({ visible, setVisible, action, student, gradeToUpdate }) =
                 size="lg"
                 placeholder="Parcial 2"
                 name="secondPartial"
-                value={gradeToUpdate.secondPartial}
+                value={secondPartial}
+                onChange={(event) => setSecondPartial(Number(event.target.value))}
               />
               <Input
                 clearable
@@ -73,7 +103,8 @@ const DetalleModal = ({ visible, setVisible, action, student, gradeToUpdate }) =
                 size="lg"
                 placeholder="Parcial 3"
                 name="thirdPartial"
-                value={gradeToUpdate.thirdPartial}
+                value={thirdPartial}
+                onChange={(event) => setThirdPartial(Number(event.target.value))}
               />
               <Input
                 clearable
@@ -83,7 +114,7 @@ const DetalleModal = ({ visible, setVisible, action, student, gradeToUpdate }) =
                 size="lg"
                 placeholder="Promedio"
                 name="finalGrade"
-                value={(gradeToUpdate.firstPartial + gradeToUpdate.secondPartial + gradeToUpdate.thirdPartial) / 3}
+                value={(firstPartial + secondPartial + thirdPartial) / 3}
                 disabled
               />
 
